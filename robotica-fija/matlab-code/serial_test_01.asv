@@ -10,19 +10,24 @@ for i=0:1:10
     fprintf(arrob_serie,"a0");
     fprintf("Led off\n");
     pause(.5)
+    return;
+    if i == 5
+        fprintf("Mi momento ah llegado .. \n")
+        pause(1);
+        my_fun()
+        break;
+    end
 end
 
 fprintf("Closing ARROB ...\n");
 fclose(arrob_serie);
-delete(arrob_serie);
-fprintf("Bye Bye :c \n");
 clearvars arrob_serie i
+fprintf("Bye Bye :c \n");
 
 function my_fun()
     fprintf("Se metio a la funcion")
     fclose(arrob_serie);
-    delete(arrob_serie)
     clearvars arrob_serie i
     fprintf("Bye Bye :c \n");
-    return;
+    return 
 end

@@ -1,11 +1,17 @@
 current_serial = instrfind;
+s = size(current_serial);
+s = s(1,2);
+current_serial = current_serial(s);
 
-try
-    s = size(current_serial);
-    s = s(1,2);
+for i = 1:1:s
     
-    port =  char(current_serial.Port(s));
-    if char(current_serial.Status(s)) == "open"
+end
+
+   
+    
+    port =  char(current_serial.Port);
+    status = current_serial.Status
+    if  status == 'open'
         fprintf("%s is currently open\n",port);   
         while 1
             answer = input('Would you like to close it? \n-[Y]es or [N]o\n','s');
@@ -22,12 +28,10 @@ try
         end
     else
         fprintf('All ports currently closed\n');
-        delete(current_serial)
     end
 catch
      fprintf("All it's okay\n");
-     fprintf("I have not detected any serial port e.e\n");
-     
+     fprintf("I have not detected any serial port e.e\n");  
 end
 
 clearvars answer current_serial port s ans
