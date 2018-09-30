@@ -10,17 +10,19 @@ if s ~= 0
         if status == "open"
             port = current_serial.Port;
             fprintf("%s is currently open\n",port);   
-                %answer = input('Would you like to close it? \n-[Y]es or [N]o\n','s');
-                question = sprintf("%s is currently open\n ",port);
-                answer = questdlg(char(question),'Ooops COM port opened','Yes','No','Yes');
-                if(answer == 'Yes' )
+            while 1
+                answer = input('Would you like to close it? \n-[Y]es or [N]o\n','s');
+                if(answer == "Y" | answer == 'y' | answer == "Yes" | answer == "yes")
                     fprintf("Closing %s...\n",port);
                     fclose(current_serial);
                     delete(instrfind)
                     fprintf("Done :)\n");
-                else
+                    break;
+                elseif (answer == "N" | answer == 'n' | answer == "No" | answer == "no" )
                     fprintf("Ok.. Bye :c\n");
+                    break;
                 end       
+            end
             clearvars answer current_serial port s ans i serial_info status
             return;
         end  
