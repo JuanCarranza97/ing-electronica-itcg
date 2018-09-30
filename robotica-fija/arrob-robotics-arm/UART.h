@@ -11,7 +11,7 @@
   #define MAX_TIME             2000
   #define CHAR_ENDS              '\n'
   #define NUMBERS_BETWEEN        ','
-  #define UART_LOG
+  //#define UART_LOG
 
   void uart_init(void);
   bool uart_get(char *caracter_salida,int *size_,int _datos[]); 

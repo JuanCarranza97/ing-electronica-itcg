@@ -1,70 +1,67 @@
 #include "TERMINAL.h"
 
 /*extern Servo articulacion[8];
-extern int servosPinOut[8];
+extern int servosPinOut[8];*/
 
 terminal_actions actions[]={
-  {terminalAction_A,'A',8,"Recibe los pines se los servomotores conectados al robot cuadrupedo (Ej: A2,3,4,5,6,7,8,9)","Modificando pines de Servos"},
-  {terminalAction_a,'a',1,"Pide los pines de los sermotores guardados en el cuadrupedo (Ej: a0)","Enviando pines de Servos"},
-  {terminalAction_B,'B',1,"Prueba servomotor conectado en ese pin (Ej: B0)","Probando Servo"},
-  {terminalAction_b,'b',1,"Obtener el voltaje de la bateria (Ej: B0)","Obtener voltaje"},
+  {terminalAction_A,'a',1,"Recibe los pines se los servomotores conectados al robot cuadrupedo (Ej: A2,3,4,5,6,7,8,9)","Modificando pines de Servos"},
 };
 
 
 #define TERMINAL_ACTIONS_SIZE (sizeof(actions)/sizeof(terminal_actions))
-*/
+
 void terminal_lab(void){
-  
   if(UART_PORT.available()){
       char caracter;
       int Numbers[20];
       int bufferSize=0;
 
-      if(uart_get(&caracter,&bufferSize,Numbers)){
-          UART_PORT.println("El caracter fue "+String(caracter)+" y Se detectaron "+String(bufferSize)+" caracteres");  
-      }
-      else{
-        UART_PORT.println("TErmino mal");
-      }
-      /*bool found = false;
-      
-        for(int i = 0;i<TERMINAL_ACTIONS_SIZE;i++){
-          if(caracter == actions[i].caracter){
-            found = true;
-            #ifdef TERMINAL_MESSAGES
-              Serial.println(actions[i].actionString);
-            #endif
-            if(actions[i].tam == bufferSize){
-              actions[i].Callback(Numbers,bufferSize);
-            }
-            else{
-              #ifdef TERMINAL_MESSAGES
-                UART_PORT.println("NO COINCIDE");
-              #endif
-            }
-          }
-        }
+        if(uart_get(&caracter,&bufferSize,Numbers)){
+          UART_PORT.println("Finalizo bien");
+          UART_PORT.println("Char = "+String(caracter)+" \nMsg Size = "+String(bufferSize));
 
-      /* #ifdef TERMINAL_MESSAGES
-       if(found == false){
-        UART_PORT.println("COMANDO NO RECONOCIDO, INTRODUZCA UNO VALIDO");
-          for(int i = 0;i<TERMINAL_ACTIONS_SIZE;i++){
-            UART_PORT.println(" -CHAR: "+String(actions[i].caracter)+"-"+actions[i].helpString);
-          }
-       }
-       #endif*/
-  }
-  
+           bool found = false;
+      
+              for(int i = 0;i<TERMINAL_ACTIONS_SIZE;i++){
+                if(caracter == actions[i].caracter){
+                  found = true;
+                  #ifdef TERMINAL_LOG
+                    Serial.println(actions[i].actionString);
+                  #endif
+                  if(actions[i].tam == bufferSize){
+                    actions[i].Callback(Numbers);
+                  }
+                  else{
+                    #ifdef TERMINAL_LOG
+                      UART_PORT.println("Number Size doesn't match");
+                    #endif
+                  }
+                }
+              }
+
+               #ifdef TERMINAL_LOG
+                if(found == false){
+                  UART_PORT.println("ERROR: command it's not recognized, Here are the valid ones");
+                    for(int i = 0;i<TERMINAL_ACTIONS_SIZE;i++){
+                      UART_PORT.println(" -Char: "+String(actions[i].caracter)+", "+actions[i].helpString);
+                    }
+                }
+               #endif
+        }
+        else{
+          UART_PORT.println("Termino mal :c");
+        }
+  }  
+}
+
+
+void terminalAction_A(int var[]){
+     UART_PORT.println("TE medio a la primer fucnion");
+     if(var[0] == 0) digitalWrite(13,LOW);
+     else            digitalWrite(13,HIGH);
 }
 
 /*
-void terminalAction_A(int var[],int tam){
-      for(int i = 0;i<8;i++){
-        servosPinOut[i]=var[i];   
-     }
-     saveEEPROM();
-}
-
 void terminalAction_a(int var[],int tam){
     UART_PORT.print("a");
     for(int i = 0;i<7;i++){

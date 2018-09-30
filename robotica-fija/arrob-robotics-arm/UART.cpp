@@ -17,19 +17,19 @@ bool uart_get(char *caracter_salida,int *size_,int _datos[]){
       last_char = *caracter_salida;
           if(*caracter_salida == CHAR_ENDS){
               #ifdef UART_LOG
-                UART_PORT.println("Message need start with a letter");
+                UART_PORT.println("ERROR: Message need start with a letter");
               #endif 
               return false;
           }
           if(*caracter_salida == NUMBERS_BETWEEN){
               #ifdef UART_LOG
-                UART_PORT.println("Message can not start with "+String(NUMBERS_BETWEEN));
+                UART_PORT.println("ERROR: Message can not start with "+String(NUMBERS_BETWEEN));
               #endif 
               return false;
           }
           if(*caracter_salida >= 48 && *caracter_salida <= 57){
               #ifdef UART_LOG
-                UART_PORT.println("Message can not start with a number");
+                UART_PORT.println("ERROR: Message can not start with a number");
               #endif 
               last_char = *caracter_salida;
               return false;
@@ -53,14 +53,14 @@ bool uart_get(char *caracter_salida,int *size_,int _datos[]){
           else if(actual == NUMBERS_BETWEEN){
               if(last_char == NUMBERS_BETWEEN){
                   #ifdef UART_LOG 
-                    UART_PORT.println("It's no possible to put 2 "+String(NUMBERS_BETWEEN)+" followed");
+                    UART_PORT.println("ERROR: It's no possible to put 2 "+String(NUMBERS_BETWEEN)+" followed");
                   #endif
                 last_char = NUMBERS_BETWEEN;
                 return false;
               }
               else if(!first_digit){
                  #ifdef UART_LOG 
-                    UART_PORT.println("It is need to put at least 1 number");
+                    UART_PORT.println("ERROR: It is need to put at least 1 number");
                   #endif
                 last_char = NUMBERS_BETWEEN;
                 return false;
@@ -73,7 +73,7 @@ bool uart_get(char *caracter_salida,int *size_,int _datos[]){
           else if(actual == CHAR_ENDS){
               if(last_char == NUMBERS_BETWEEN) {
                   #ifdef UART_LOG 
-                    UART_PORT.println("Message can not end with "+String(NUMBERS_BETWEEN));
+                    UART_PORT.println("ERROR: Message can not end with "+String(NUMBERS_BETWEEN));
                   #endif
                 last_char = NUMBERS_BETWEEN;
                 return false;
