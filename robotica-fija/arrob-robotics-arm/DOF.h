@@ -20,6 +20,7 @@
      public:
         dof();
         void set(int _setup,int _val);
+        int get_value(int _setup);
         void init_eeprom_at(int _addr);
         void eeprom_read(void);
         void eeprom_write(void); 

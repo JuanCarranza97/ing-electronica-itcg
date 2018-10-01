@@ -5,7 +5,7 @@
 
   #include "ARROB_CONFIG.h"
   
-  #define TERMINAL_LOG
+  //#define TERMINAL_LOG
   //#define TERMINAL_DEBUG
   
   typedef void (*terminalCallback)(int var[]);  
@@ -23,6 +23,7 @@
   void terminalAction_a(int var[]);
   void terminalAction_s(int var[]);
   void terminalAction_e(int var[]);
+  void terminalAction_r(int var[]);
   /*void terminalAction_a(int var[],int tam);
   void terminalAction_B(int var[],int tam);
   void terminalAction_b(int var[],int tam);*/

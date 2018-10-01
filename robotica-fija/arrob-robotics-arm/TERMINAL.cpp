@@ -1,11 +1,13 @@
 #include "TERMINAL.h"
 
 extern dof axis[6]; 
-
+String axis_names[6] = {"WAIST","SHOULDER_1","SHOULDER_2","ELBOW","DOLL","GRIPPER"};
+String setting_names[DATA_SIZE] = {"SERVO_PIN","MAX_SIGNAL","MIN_SIGNAL","MAX_DEGREE","MIN_DEGREE","HOME_DEGREE"};
 terminal_actions actions[]={
   {terminalAction_a,'a',1,"Modify LED13 Output STATUS(0-LOW,1-HIGH) {aSTATUS}","Led 13 Toggle"},
   {terminalAction_s,'s',3,"Set VALUE to specific DOF SETUP {sDOF,SETUP,VALUE}","Setting servo values"},
   {terminalAction_e,'e',1,"Save or Read EEPROM memory values ACTION(0-Read,1-Write) {eACTION}","EEPROM Memory Access"},
+  {terminalAction_r,'r',2,"Read SETUP of DOF {rDOF,SETUP} SETUP=a, returns all","Reading specific value"},
 };
 
 
@@ -152,3 +154,8 @@ void terminalAction_e(int var[]){
   }
 }
 
+void terminalAction_r(int var[]){
+   if(var[0] >= 0 && var[0] < 6){
+        UART_PORT.println(" -"+axis_names[var[0]]+" "+setting_names[var[1]]+" = "+String(axis[var[0]].get_value(var[1])));
+    }
+ }

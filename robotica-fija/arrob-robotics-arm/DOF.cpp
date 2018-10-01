@@ -39,6 +39,16 @@ void dof::set(int _setup,int _val){
   data[_setup] = _val;
 }
 
+int dof::get_value(int _setup){
+  if(_setup >= 0 && _setup < DATA_SIZE)
+    return data[_setup];
+  #ifdef TERMINAL_LOG
+  else{
+    UART_PORT.println("ERROR: This data Doesn't exists");
+    return 0;
+  }
+  #endif
+}
 void dof::init_eeprom_at(int _addr){
   eeprom_addr = _addr;  
 }
