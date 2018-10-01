@@ -39,7 +39,6 @@ bool uart_get(char *caracter_salida,int *size_,int _datos[]){
       *caracter_salida = last_char;
       last_char = 0;
     }
-    
 
     do{
       if(UART_PORT.available()){
@@ -78,8 +77,18 @@ bool uart_get(char *caracter_salida,int *size_,int _datos[]){
                 last_char = NUMBERS_BETWEEN;
                 return false;
               }
-            last_char = CHAR_ENDS;
-            bufferComplete=true;
+              
+            if(first_digit){
+              last_char = CHAR_ENDS;
+              bufferComplete=true;
+            }
+            else{
+                #ifdef UART_LOG 
+                    UART_PORT.println("ERROR: Needs at least ONE argument "+String(NUMBERS_BETWEEN));
+                  #endif
+                last_char = CHAR_ENDS;
+                return false;
+            }
           }
           else{
               #ifdef UART_LOG

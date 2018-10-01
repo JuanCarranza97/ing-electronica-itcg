@@ -10,7 +10,8 @@
 
   #define MAX_TIME             2000
   #define CHAR_ENDS              '\n'
-  #define NUMBERS_BETWEEN        ','
+  #define NUMBERS_BETWEEN         ','
+  
   //#define UART_LOG
 
   void uart_init(void);

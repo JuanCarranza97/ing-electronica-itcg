@@ -50,16 +50,18 @@ function guide_test_01_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to guide_test_01 (see VARARGIN)
-fprintf("Initializing ARROB ...\n");
+clear_serial_port
 global arrob_serie
 com_port = getappdata(0,'com_port');
 arrob_serie = serial(com_port,'BaudRate',115200);
 arrob_serie.BytesAvailableFcnMode = 'terminator';
 arrob_serie.BytesAvailableFcn = @arrob_serial_complete;
-f = waitbar(.5,strcat"Connecting to %s ...\n",com_port);
+fprintf("Initializing ARROB ...\n");
+f = waitbar(.5,strcat({'Connecting to '},{com_port},{' ...'}));
 fopen(arrob_serie);   
-waitbar(1,f,'Done B)');
-pause(.5)
+waitbar(1,f,'Done B) ')
+pause(1.5)
+close(f)
 fprintf("Done B)\n");
 % Choose default command line output for guide_test_01
 handles.output = hObject;
