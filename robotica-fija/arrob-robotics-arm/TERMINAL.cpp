@@ -3,6 +3,7 @@
 extern dof axis[6]; 
 String axis_names[6] = {"WAIST","SHOULDER_1","SHOULDER_2","ELBOW","DOLL","GRIPPER"};
 String setting_names[DATA_SIZE] = {"SERVO_PIN","MAX_SIGNAL","MIN_SIGNAL","MAX_DEGREE","MIN_DEGREE","HOME_DEGREE"};
+
 terminal_actions actions[]={
   {terminalAction_a,'a',1,"Modify LED13 Output STATUS(0-LOW,1-HIGH) {aSTATUS}","Led 13 Toggle"},
   {terminalAction_s,'s',3,"Set VALUE to specific DOF SETUP {sDOF,SETUP,VALUE}","Setting servo values"},
@@ -20,50 +21,16 @@ void terminal_lab(void){
       int bufferSize=0;
 
         if(uart_get(&caracter,&bufferSize,Numbers)){
-          #ifdef TERMINAL_DEBUG
-            UART_PORT.println("Finalizo bien");
-            UART_PORT.println("Char = "+String(caracter)+" \nMsg Size = "+String(bufferSize));
-          #endif
            bool found = false;
       
               for(int i = 0;i<TERMINAL_ACTIONS_SIZE;i++){
                 if(caracter == actions[i].caracter){
                   found = true;
-                  #ifdef TERMINAL_LOG
-                    UART_PORT.println(actions[i].actionString);
-                  #endif
                   if(actions[i].tam == bufferSize){
                     actions[i].Callback(Numbers);
-                  }
-                  else{
-                    #ifdef TERMINAL_LOG
-                      UART_PORT.println("ERROR: Number Size doesn't match");
-                    #endif
-                  }
+                  }                
                 }
               }
-
-               #ifdef TERMINAL_LOG
-                if(found == false){
-                  UART_PORT.println("\n###############################################################################\nERROR: Command it's not recognized, Here are the valid ones");
-                  UART_PORT.println("          DOF           SETUP\n  0 ==> -WAIST      -SERVO_PIN\n  1 ==> -SHOULDER_1 -MAX_SIGNAL \n  2 ==> -SHOULDER_2 -MIN_SIGNAL\n  3 ==> -ELBOW      -MAX_DEGREE\n  4 ==> -DOLL       -MIN_DEGREE\n  5 ==> -GRIPPER    -HOME_DEGREE\n");
-                    for(int i = 0;i<TERMINAL_ACTIONS_SIZE;i++){
-                      UART_PORT.println(" -Char: "+String(actions[i].caracter)+", "+actions[i].helpString);
-                    }
-                }
-               #endif
-        }
-        else{
-          #ifdef TERMINAL_DEBUG
-          UART_PORT.println("Termino mal :c");
-          #endif
-          #ifdef TERMINAL_LOG
-            UART_PORT.println("\n###############################################################################\nERROR: Command it's not recognized, Here are the valid ones");
-                  UART_PORT.println("          DOF           SETUP\n  0 ==> -WAIST      -SERVO_PIN\n  1 ==> -SHOULDER_1 -MAX_SIGNAL \n  2 ==> -SHOULDER_2 -MIN_SIGNAL\n  3 ==> -ELBOW      -MAX_DEGREE\n  4 ==> -DOLL       -MIN_DEGREE\n  5 ==> -GRIPPER    -HOME_DEGREE\n");
-                    for(int i = 0;i<TERMINAL_ACTIONS_SIZE;i++){
-                      UART_PORT.println(" -Char: "+String(actions[i].caracter)+", "+actions[i].helpString);
-                    }
-          #endif
         }
   }  
 }
@@ -140,12 +107,18 @@ void terminalAction_e(int var[]){
       UART_PORT.print(" -Writing EEPROM ... ");
     #endif
     eeprom_write();
+    #ifdef TERMINAL_LOG
+      UART_PORT.println(" Done");
+     #endif
   }
   else if(var[0] == 0){
     #ifdef TERMINAL_LOG
       UART_PORT.print(" -Reading EEPROM ... ");
     #endif
     eeprom_read();
+    #ifdef  TERMINAL_LOG 
+      UART_PORT.println(" Done");
+     #endif
   }
   else{
     #ifdef TERMINAL_LOG

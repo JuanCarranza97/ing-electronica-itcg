@@ -23,6 +23,7 @@
         int get_value(int _setup);
         void init_eeprom_at(int _addr);
         void eeprom_read(void);
+        void print_eeprom(void);
         void eeprom_write(void); 
      private:
         int data[DATA_SIZE];

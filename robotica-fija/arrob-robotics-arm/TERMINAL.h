@@ -5,8 +5,7 @@
 
   #include "ARROB_CONFIG.h"
   
-  //#define TERMINAL_LOG
-  //#define TERMINAL_DEBUG
+  #define TERMINAL_LOG
   
   typedef void (*terminalCallback)(int var[]);  
 
