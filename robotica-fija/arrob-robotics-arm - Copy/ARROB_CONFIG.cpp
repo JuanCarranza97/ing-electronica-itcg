@@ -2,7 +2,6 @@
 
 dof axis[6];
 
-
 void init_dof_eeprom(void){
   axis[WAIST].init_eeprom_at(0);
   axis[SHOULDER_1].init_eeprom_at(6);

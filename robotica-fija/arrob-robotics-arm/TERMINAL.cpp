@@ -1,14 +1,18 @@
 #include "TERMINAL.h"
 
 extern dof axis[6]; 
-String axis_names[6] = {"WAIST","SHOULDER_1","SHOULDER_2","ELBOW","DOLL","GRIPPER"};
-String setting_names[DATA_SIZE] = {"SERVO_PIN","MAX_SIGNAL","MIN_SIGNAL","MAX_DEGREE","MIN_DEGREE","HOME_DEGREE"};
+const String axis_names[6] = {"WAIST","SHOULDER_1","SHOULDER_2","ELBOW","DOLL","GRIPPER"};
+const String setting_names[DATA_SIZE] = {"SERVO_PIN","MAX_SIGNAL","MIN_SIGNAL","MAX_DEGREE","MIN_DEGREE","HOME_DEGREE"};
+
 
 terminal_actions actions[]={
-  {terminalAction_a,'a',1,"Modify LED13 Output STATUS(0-LOW,1-HIGH) {aSTATUS}","Led 13 Toggle"},
-  {terminalAction_s,'s',3,"Set VALUE to specific DOF SETUP {sDOF,SETUP,VALUE}","Setting servo values"},
-  {terminalAction_e,'e',1,"Save or Read EEPROM memory values ACTION(0-Read,1-Write) {eACTION}","EEPROM Memory Access"},
-  {terminalAction_r,'r',2,"Read SETUP of DOF {rDOF,SETUP} SETUP=a, returns all","Reading specific value"},
+  {terminalAction_a,'a',1},
+  {terminalAction_s,'s',3},
+  {terminalAction_e,'e',1},
+  {terminalAction_r,'r',2},
+  {terminalAction_d,'d',2},
+  {terminalAction_p,'p',3},
+  {terminalAction_t,'t',2},
 };
 
 
@@ -27,108 +31,101 @@ void terminal_lab(void){
                 if(caracter == actions[i].caracter){
                   found = true;
                   if(actions[i].tam == bufferSize){
-                    actions[i].Callback(Numbers);
-                  }                
+                    UART_PORT.println("e"+String(actions[i].Callback(Numbers)));
+                  }
+                  else{
+                    UART_PORT.println("e"+String(2));                
+                  }
                 }
               }
+        }
+        else{
+          UART_PORT.println("e"+String(2));
         }
   }  
 }
 
 
-void terminalAction_a(int var[]){
-     if(var[0] == 0) {
-      digitalWrite(13,LOW);
-      #ifdef TERMINAL_LOG
-        UART_PORT.println("  -LED13 OFF");
-      #endif
-     }
-     else if(var[0] == 1)           {
-      digitalWrite(13,HIGH);
-      #ifdef TERMINAL_LOG
-        UART_PORT.println("  -LED13 ON");
-      #endif
-     }
-     else{
-      #ifdef TERMINAL_LOG
-        UART_PORT.println("  -Led status didn't change");
-      #endif
-     }
+int terminalAction_a(int var[]){
+  if(var[0] == 0 ||  var[0] == 1){
+     if(var[0] == 0)        digitalWrite(13,LOW);
+     else if(var[0] == 1)   digitalWrite(13,HIGH);
+  }
+  else  return 3;
+  return 0;  
 }
 
-void terminalAction_s(int var[]){
-  if(var[0] >= 0 && var[0] <= 5){
-    if(var[1] >= 0 && var[1] <= 6){
-       #ifdef TERMINAL_LOG
-       switch(var[0]){
-         case WAIST:
-          UART_PORT.print(" -Setting WAIST ...");
-          break;
-
-         case SHOULDER_1:
-          UART_PORT.print(" -Setting SHOULDER 1 ...");
-          break;
-
-         case SHOULDER_2:
-          UART_PORT.print(" -Setting SHOULDER 2 ...");
-          break;
-
-         case ELBOW:
-          UART_PORT.print(" -Setting ELBOW ...");
-          break;
-
-         case DOLL:
-          UART_PORT.print(" -Setting DOLL ...");
-          break;
-
-         case GRIPPER:
-          UART_PORT.print(" -Setting GRIPPER ...");
-          break;
-       }
-       #endif
+int terminalAction_s(int var[]){
+  if(var[0] >= 0 && var[0] <= 5){  //If DOF exists
+    if(var[1] >= 0 && var[1] < DATA_SIZE){  //if configuration exists
        axis[var[0]].set(var[1],var[2]);
     }
-    else{
-      #ifndef TERMINAL_LOG
-        UART_PORT.println(" ERROR: I'm sorry, Actually I don't have that setting");
-      #endif
-    }
+    else  return 3;
   }
-  else{
-    #ifdef TERMINAL_LOG
-      UART_PORT.println(" ERROR: I'm sorry, I don't have this DOF");
-    #endif
-  }
+  else    return 4;
+  return 0;
 }
 
-void terminalAction_e(int var[]){
-  if(var[0] == 1){
-    #ifdef TERMINAL_LOG
-      UART_PORT.print(" -Writing EEPROM ... ");
-    #endif
+int terminalAction_e(int var[]){
+  if(var[0] == 1){  //Writing  EEPROM
     eeprom_write();
-    #ifdef TERMINAL_LOG
-      UART_PORT.println(" Done");
-     #endif
   }
-  else if(var[0] == 0){
-    #ifdef TERMINAL_LOG
-      UART_PORT.print(" -Reading EEPROM ... ");
-    #endif
+  else if(var[0] == 0){  //Reading EEPROM
     eeprom_read();
-    #ifdef  TERMINAL_LOG 
-      UART_PORT.println(" Done");
-     #endif
   }
   else{
-    #ifdef TERMINAL_LOG
-      UART_PORT.println("ERROR: Not memory access function defined");
-    #endif
+    return 3;
   }
+  return 0;
 }
 
-void terminalAction_r(int var[]){
-   if(var[0] >= 0 && var[0] < 6){
-        UART_PORT.println(" -"+axis_names[var[0]]+" "+setting_names[var[1]]+" = "+String(axis[var[0]].get_value(var[1])));
+int terminalAction_r(int var[]){
+   if(var[0] >= 0 && var[0] <= 5){
+      if(var[1] >= 0 && var[1] < DATA_SIZE){
+        UART_PORT.println("v"+String(var[0])+","+String(var[1])+","+String(axis[var[0]].get_value(var[1])));
+        delay(50);
+      }
+      else return 3;
     }
+    else{
+      return 4;
+    }
+    return 0;
  }
+
+int terminalAction_d(int var[]){
+  if(var[0] >= 0 && var[0] < 6){
+    if(var[1] == 0)      axis[var[0]].detach_servo();
+    else if(var[1] == 0) axis[var[0]].attach_servo();
+    else                 return 3;
+  }
+  else{
+    return 4;
+  }
+  return 0; 
+}
+
+int terminalAction_p(int var[]){
+  //0 without map,1 with map
+  if(var[0] >= 0 && var[0] < 6) {
+    if(var[1] == 0 || var[1] == 1) axis[0].set_position(var[1],var[2]);
+    else{  //No available config
+      return 3;
+    }
+  }
+  else {  //No specifics  DOF
+    return 4;
+  }
+  return 0;
+}
+
+int terminalAction_t(int var[]){
+  if(var[0] >= 0 && var[0] <6){
+    axis[var[0]].test_servo(var[1]);
+  }
+  else{
+    return 3;
+  }
+  return 0;
+}
+

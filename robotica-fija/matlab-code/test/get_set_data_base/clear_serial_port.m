@@ -1,4 +1,3 @@
-%Current Serial port
 serial_info = instrfind;
 s = size(serial_info);
 s = s(1,2);
@@ -28,6 +27,6 @@ if s ~= 0
     end
 end
 
-fprintf("Any COM port is open ... Opening COM PORT ...\n");
+fprintf("Any port is open #_#\n");
 delete(instrfind)
 clearvars answer current_serial port s ans i serial_info status

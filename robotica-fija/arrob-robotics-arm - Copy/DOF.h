@@ -25,12 +25,7 @@
         void eeprom_read(void);
         void print_eeprom(void);
         void eeprom_write(void); 
-        void attach_servo(void);
-        void detach_servo(void);
-        void set_position(int x,int _degree);
-        void test_servo(int _delay);
      private:
-        Servo dof_servo;
         int data[DATA_SIZE];
         int eeprom_addr;      
   };

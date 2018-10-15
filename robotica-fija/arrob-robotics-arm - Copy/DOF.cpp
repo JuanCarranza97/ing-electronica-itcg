@@ -61,33 +61,3 @@ void dof::print_eeprom(void){
   UART_PORT.println(eeprom_addr);
 }
 
-void dof::attach_servo(void){
-  dof_servo.attach(data[SERVO_PIN]);
-  dof_servo.write(data[HOME_DEGREE]);  
-}
-
-void dof::detach_servo(void){
-   dof_servo.detach();
-}
-
-void dof::set_position(int x,int _degree){
-  if(x == 0)   dof_servo.write(_degree);
-  else         dof_servo.write(map(_degree,data[MIN_DEGREE],data[MAX_DEGREE],data[MIN_SIGNAL],data[MAX_SIGNAL]));
-}
-
-void dof::test_servo(int _delay){
-  dof::set_position(1,data[HOME_DEGREE]);
-  delay(250);
-  for(int i = data[HOME_DEGREE];i>= data[MIN_DEGREE];i--){
-    dof::set_position(1,i);
-    delay(_delay);
-  }
-  for(int i = data[MIN_DEGREE];i<= data[MAX_DEGREE];i++){
-    dof::set_position(1,i);
-    delay(_delay);
-  }
-  for(int i = data[MAX_DEGREE];i >= data[HOME_DEGREE];i--){
-    dof::set_position(1,i);
-    delay(_delay);
-  }
-}
