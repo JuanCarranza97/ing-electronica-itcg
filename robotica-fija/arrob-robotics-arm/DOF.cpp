@@ -63,7 +63,7 @@ void dof::print_eeprom(void){
 
 void dof::attach_servo(void){
   dof_servo.attach(data[SERVO_PIN]);
-  dof_servo.write(data[HOME_DEGREE]);  
+  dof_servo.write(map(data[HOME_DEGREE],data[MIN_DEGREE],data[MAX_DEGREE],data[MIN_SIGNAL],data[MAX_SIGNAL]));  
 }
 
 void dof::detach_servo(void){

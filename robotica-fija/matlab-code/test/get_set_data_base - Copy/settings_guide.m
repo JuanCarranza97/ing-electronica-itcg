@@ -22,7 +22,7 @@ function varargout = settings_guide(varargin)
 
 % Edit the above text to modify the response to help settings_guide
 
-% Last Modified by GUIDE v2.5 15-Oct-2018 01:33:18
+% Last Modified by GUIDE v2.5 14-Oct-2018 20:27:31
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -57,8 +57,7 @@ handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
-global arrob_serie
-arrob_serie.BytesAvailableFcn = @arrob_serial_complete;
+
 % UIWAIT makes settings_guide wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -96,21 +95,20 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
+
 % --- Executes on button press in read_button.
 function read_button_Callback(hObject, eventdata, handles)
 % hObject    handle to read_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global arrob_serie
-fprintf(arrob_serie,"e0");
+
 
 % --- Executes on button press in save_button.
 function save_button_Callback(hObject, eventdata, handles)
 % hObject    handle to save_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global arrob_serie
-fprintf(arrob_serie,"e1");
+
 
 % --- Executes on button press in close_button.
 function close_button_Callback(hObject, eventdata, handles)
@@ -124,9 +122,7 @@ function test_button_Callback(hObject, eventdata, handles)
 % hObject    handle to test_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global arrob_serie
-dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-fprintf(arrob_serie,strcat("t",dof,",10"));
+
 
 
 function input_servo_pin_Callback(hObject, eventdata, handles)
@@ -198,18 +194,18 @@ end
 
 
 
-function home_degree_input_Callback(hObject, eventdata, handles)
-% hObject    handle to home_degree_input (see GCBO)
+function edit4_Callback(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of home_degree_input as text
-%        str2double(get(hObject,'String')) returns contents of home_degree_input as a double
+% Hints: get(hObject,'String') returns contents of edit4 as text
+%        str2double(get(hObject,'String')) returns contents of edit4 as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function home_degree_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to home_degree_input (see GCBO)
+function edit4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -221,96 +217,18 @@ end
 
 
 
-function min_degree_input_Callback(~, eventdata, handles)
-% hObject    handle to min_degree_input (see GCBO)
+function edit5_Callback(hObject, eventdata, handles)
+% hObject    handle to edit5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of min_degree_input as text
-%        str2double(get(hObject,'String')) returns contents of min_degree_input as a double
+% Hints: get(hObject,'String') returns contents of edit5 as text
+%        str2double(get(hObject,'String')) returns contents of edit5 as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function min_degree_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to min_degree_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-% --- Executes during object creation, after setting all properties.
-function min_signal_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to min_degree_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-function max_degree_input_Callback(hObject, eventdata, handles)
-% hObject    handle to max_degree_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of max_degree_input as text
-%        str2double(get(hObject,'String')) returns contents of max_degree_input as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function max_degree_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to max_degree_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in attach_button.
-function attach_button_Callback(hObject, eventdata, handles)
-% hObject    handle to attach_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global arrob_serie
-dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-fprintf(arrob_serie,strcat("d",dof,",1"));
-
-% --- Executes on button press in detach_button.
-function detach_button_Callback(hObject, eventdata, handles)
-% hObject    handle to detach_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global arrob_serie
-dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-fprintf(arrob_serie,strcat("d",dof,",0"));
-
-
-function position_input_Callback(hObject, eventdata, handles)
-% hObject    handle to position_input (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global arrob_serie
-dof = num2str(get(handles.pop_selected_dof,'Value')-1)
-degree = get(handles.position_input,'String');
-fprintf(strcat("p",dof,",0,",degree+"\n"));
-fprintf(arrob_serie,strcat("p",dof,",0,",degree));
-% Hints: get(hObject,'String') returns contents of position_input as text
-%        str2double(get(hObject,'String')) returns contents of position_input as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function position_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to position_input (see GCBO)
+function edit5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -322,18 +240,18 @@ end
 
 
 
-function map_position_input_Callback(hObject, eventdata, handles)
-% hObject    handle to map_position_input (see GCBO)
+function edit6_Callback(hObject, eventdata, handles)
+% hObject    handle to edit6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of map_position_input as text
-%        str2double(get(hObject,'String')) returns contents of map_position_input as a double
+% Hints: get(hObject,'String') returns contents of edit6 as text
+%        str2double(get(hObject,'String')) returns contents of edit6 as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function map_position_input_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to map_position_input (see GCBO)
+function edit6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -342,31 +260,3 @@ function map_position_input_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-% --- Executes on button press in pushbutton7.
-function pushbutton7_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton7 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global arrob_serie
-dof = num2str(get(handles.pop_selected_dof,'Value')-1)
-degree = get(handles.position_input,'String');
-fprintf(arrob_serie,strcat("s",dof,",1,",degree));
-
-% --- Executes on button press in min_signal_button.
-function min_signal_button_Callback(hObject, eventdata, handles)
-% hObject    handle to min_signal_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global arrob_serie
-dof = num2str(get(handles.pop_selected_dof,'Value')-1)
-degree = get(handles.position_input,'String');
-fprintf(arrob_serie,strcat("s",dof,",2,",degree));
-
-
-function arrob_serial_complete(obj,event)
-global arrob_serie
-input = fgetl(arrob_serie);
-fprintf("Interrupcion .. 2\n");
-fprintf(strcat(input,"\n"));

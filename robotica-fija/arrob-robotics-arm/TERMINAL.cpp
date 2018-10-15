@@ -96,7 +96,7 @@ int terminalAction_r(int var[]){
 int terminalAction_d(int var[]){
   if(var[0] >= 0 && var[0] < 6){
     if(var[1] == 0)      axis[var[0]].detach_servo();
-    else if(var[1] == 0) axis[var[0]].attach_servo();
+    else if(var[1] == 1) axis[var[0]].attach_servo();
     else                 return 3;
   }
   else{
@@ -108,7 +108,7 @@ int terminalAction_d(int var[]){
 int terminalAction_p(int var[]){
   //0 without map,1 with map
   if(var[0] >= 0 && var[0] < 6) {
-    if(var[1] == 0 || var[1] == 1) axis[0].set_position(var[1],var[2]);
+    if(var[1] == 0 || var[1] == 1) axis[var[0]].set_position(var[1],var[2]);
     else{  //No available config
       return 3;
     }

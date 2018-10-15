@@ -67,15 +67,12 @@ fprintf("Initializing ARROB ...\n");
 f = waitbar(.5,strcat({'Connecting to '},{com_port},{' ...'}));
 fopen(arrob_serie);   
 waitbar(1,f,'Done B) ');
-setappdata(0,'arrob_serie',arrob_serie);
 pause(1.5);
 close(f);
 fprintf("Done B)\n");
 % UIWAIT makes main_guide wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
-function arrob_serial_complete(obj,event)
-fprintf("Interrupcion ..\n");
 
 % --- Outputs from this function are returned to the command line.
 function varargout = main_guide_OutputFcn(hObject, eventdata, handles) 
@@ -93,4 +90,3 @@ function settings_butotn_Callback(hObject, eventdata, handles)
 % hObject    handle to settings_butotn (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-run settings_guide.m
