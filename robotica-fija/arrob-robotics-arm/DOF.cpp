@@ -63,7 +63,7 @@ void dof::print_eeprom(void){
 
 void dof::attach_servo(void){
   dof_servo.attach(data[SERVO_PIN]);
-  dof_servo.write(map(data[HOME_DEGREE],data[MIN_DEGREE],data[MAX_DEGREE],data[MIN_SIGNAL],data[MAX_SIGNAL]));  
+  dof_servo.write(data[HOME_DEGREE]);  
 }
 
 void dof::detach_servo(void){
@@ -76,7 +76,19 @@ void dof::set_position(int x,int _degree){
 }
 
 void dof::test_servo(int _delay){
-  dof::set_position(1,data[HOME_DEGREE]);
+  int actual_pos = map(dof_servo.read(),data[MIN_SIGNAL],data[MAX_SIGNAL],data[MIN_DEGREE],data[MAX_DEGREE]);
+  if(actual_pos > data[HOME_DEGREE]){
+    for(int i = actual_pos;i >= data[HOME_DEGREE];i--){
+      dof::set_position(1,i);
+      delay(_delay);
+    }
+  }
+  else{
+    for(int i = actual_pos;i<=data[HOME_DEGREE];i++){
+      dof::set_position(1,i);
+      delay(_delay);
+    }
+  }
   delay(250);
   for(int i = data[HOME_DEGREE];i>= data[MIN_DEGREE];i--){
     dof::set_position(1,i);
@@ -91,3 +103,9 @@ void dof::test_servo(int _delay){
     delay(_delay);
   }
 }
+
+int dof::get_pos(int x){
+  if(x == 0) return dof_servo.read();
+  else       return (map(dof_servo.read(),data[MIN_SIGNAL],data[MAX_SIGNAL],data[MIN_DEGREE],data[MAX_DEGREE]));
+}
+

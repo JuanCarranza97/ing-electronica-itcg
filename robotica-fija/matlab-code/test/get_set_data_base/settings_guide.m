@@ -89,7 +89,7 @@ function pop_selected_dof_Callback(hObject, eventdata, handles)
 %        contents{get(hObject,'Value')} returns selected item from pop_selected_dof
 global arrob_serie
 dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-for i = 0:5
+for i = 0:7
     fprintf(arrob_serie,strcat("r",dof,",",num2str(i)));
     pause(.01);
 end
@@ -115,7 +115,7 @@ global arrob_serie
 fprintf(arrob_serie,"e0");
 pause(.25)
 dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-for i = 0:5
+for i = 0:7
     fprintf(arrob_serie,strcat("r",dof,",",num2str(i)));
     pause(.01);
 end
@@ -368,7 +368,11 @@ function map_position_input_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of map_position_input as text
 %        str2double(get(hObject,'String')) returns contents of map_position_input as a double
-
+global arrob_serie
+dof = num2str(get(handles.pop_selected_dof,'Value')-1);
+degree = get(handles.map_position_input,'String');
+%fprintf(strcat("p",dof,",1,",degree+"\n"));
+fprintf(arrob_serie,strcat("p",dof,",1,",degree));
 
 % --- Executes during object creation, after setting all properties.
 function map_position_input_CreateFcn(hObject, eventdata, handles)
@@ -415,7 +419,7 @@ size_i = size(input);
 size_i = size_i(2);
 input = input(1:size_i-1);
 
-pattern = '[A-Za-z][0-9]+([,][0-9]+)*$';
+pattern = '[A-Za-z][-]?[0-9]+([,][-]?[0-9]+)*$';
 dof = num2str(get(handles.pop_selected_dof,'Value')-1);
 
 if size(regexp(input,pattern,'match')) == 1 %%Si la expression es correcta
@@ -452,6 +456,14 @@ if size(regexp(input,pattern,'match')) == 1 %%Si la expression es correcta
         case 'e'
             if numbers(1) ~= 0
                 fprintf("Error: %d",numbers(1));
+            end
+        case 'p'
+            if (numbers(1) == str2num(dof)) && (n_size == 3)
+                if numbers(2) == 0
+                    set(handles.position_input,'String',num2str(numbers(3)));
+                else
+                    set(handles.map_position_input,'String',num2str(numbers(3)));
+                end
             end
         otherwise
             fprintf("No spected");

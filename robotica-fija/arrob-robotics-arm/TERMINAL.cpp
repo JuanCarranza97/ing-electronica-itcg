@@ -84,7 +84,15 @@ int terminalAction_r(int var[]){
       if(var[1] >= 0 && var[1] < DATA_SIZE){
         UART_PORT.println("v"+String(var[0])+","+String(var[1])+","+String(axis[var[0]].get_value(var[1])));
       }
-      else return 3;
+      else if(var[1] == 5){//Position sin mapear      
+         UART_PORT.println("p"+String(var[0])+",0,"+String(axis[var[0]].get_pos(0)));
+      }
+      else if(var[1] == 6){//Position mapeada
+         UART_PORT.println("p"+String(var[0])+",1,"+String(axis[var[0]].get_pos(1)));
+      }
+      else{
+        return 3;
+      }
     }
     else{
       return 4;
@@ -95,7 +103,11 @@ int terminalAction_r(int var[]){
 int terminalAction_d(int var[]){
   if(var[0] >= 0 && var[0] < 6){
     if(var[1] == 0)      axis[var[0]].detach_servo();
-    else if(var[1] == 1) axis[var[0]].attach_servo();
+    else if(var[1] == 1) {
+      axis[var[0]].attach_servo();
+      UART_PORT.println("p"+String(var[0])+",1,"+String(axis[var[0]].get_pos(1)));
+      UART_PORT.println("p"+String(var[0])+",0,"+String(axis[var[0]].get_pos(0)));
+    }
     else                 return 3;
   }
   else{
@@ -107,7 +119,11 @@ int terminalAction_d(int var[]){
 int terminalAction_p(int var[]){
   //0 without map,1 with map
   if(var[0] >= 0 && var[0] < 6) {
-    if(var[1] == 0 || var[1] == 1) axis[var[0]].set_position(var[1],var[2]);
+    if(var[1] == 0 || var[1] == 1) {
+      axis[var[0]].set_position(var[1],var[2]);
+      if(var[1] == 0) UART_PORT.println("p"+String(var[0])+",1,"+String(axis[var[0]].get_pos(1)));
+      else            UART_PORT.println("p"+String(var[0])+",0,"+String(axis[var[0]].get_pos(0)));
+    }
     else{  //No available config
       return 3;
     }
@@ -125,6 +141,8 @@ int terminalAction_t(int var[]){
   else{
     return 3;
   }
+  UART_PORT.println("p"+String(var[0])+",1,"+String(axis[var[0]].get_pos(1)));
+  UART_PORT.println("p"+String(var[0])+",0,"+String(axis[var[0]].get_pos(0)));
   return 0;
 }
 

@@ -29,6 +29,7 @@
         void detach_servo(void);
         void set_position(int x,int _degree);
         void test_servo(int _delay);
+        int get_pos(int x);
      private:
         Servo dof_servo;
         int data[DATA_SIZE];
