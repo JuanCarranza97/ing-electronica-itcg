@@ -409,7 +409,7 @@ dof = num2str(get(handles.pop_selected_dof,'Value')-1);
 degree = get(handles.position_input,'String');
 set(handles.min_signal_input,'String',degree);
 fprintf(arrob_serie,strcat("s",dof,",2,",degree));
-
+fprintf(arrob_serie,strcat("r",dof,",",num2str(6)));
 
 function arrob_serial_complete(hObject,event,handles)
 global arrob_serie
@@ -484,6 +484,6 @@ function pushbutton10_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 global arrob_serie
 dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-degree = get(handles.position_input,'String');
+degree = get(handles.map_position_input,'String');
 set(handles.home_degree_input,'String',degree);
-fprintf(arrob_serie,strcat("s",dof,",2,",degree));
+fprintf(arrob_serie,strcat("s",dof,",5,",degree));
