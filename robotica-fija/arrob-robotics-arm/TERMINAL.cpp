@@ -83,7 +83,6 @@ int terminalAction_r(int var[]){
    if(var[0] >= 0 && var[0] <= 5){
       if(var[1] >= 0 && var[1] < DATA_SIZE){
         UART_PORT.println("v"+String(var[0])+","+String(var[1])+","+String(axis[var[0]].get_value(var[1])));
-        delay(50);
       }
       else return 3;
     }

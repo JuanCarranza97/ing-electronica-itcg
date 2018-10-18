@@ -465,9 +465,9 @@ end
 %fprintf(strcat(input,"\n"));
 
 
-% --- Executes on button press in pushbutton10.
-function pushbutton10_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton10 (see GCBO)
+% --- Executes on button press in set_home_position_button.
+function set_home_position_button_Callback(hObject, eventdata, handles)
+% hObject    handle to set_home_position_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 global arrob_serie
@@ -475,3 +475,10 @@ dof = num2str(get(handles.pop_selected_dof,'Value')-1);
 degree = get(handles.position_input,'String');
 set(handles.home_degree_input,'String',degree);
 fprintf(arrob_serie,strcat("s",dof,",2,",degree));
+
+
+% --- Executes on button press in pushbutton10.
+function pushbutton10_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton10 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
