@@ -504,6 +504,7 @@ function my_callback_fcn(obj, event,handles)
 global myController
 global arrob_serie
 State = myController.GetState();
+global VibrationLevel
 %global VibrationLevel
 %VibrationLevel.LeftMotorSpeed = double(State.Gamepad.LeftTrigger)*255;
 %myController.SetVibration(VibrationLevel);
@@ -571,14 +572,24 @@ if keys == 1
                 max_signal = max_signal-20;
                 position = round(map_function(double(State.Gamepad.LeftThumbY),-32768,32767,min_signal,max_signal));              
             end
-            if(position < 0)
+            if(position < 0)               
+                VibrationLevel.LeftMotorSpeed = 65000;
+                VibrationLevel.RightMotorSpeed = 65000;
+                myController.SetVibration(VibrationLevel);
                 fprintf("Servo was not capable to set %d position\n",position);
                 position=0;
-            end
-            if position > 180
+            elseif position > 180
+                VibrationLevel.LeftMotorSpeed = 65000;
+                VibrationLevel.RightMotorSpeed = 65000;
+                myController.SetVibration(VibrationLevel);
                 fprintf("Servo was not capable to set %d position\n",position);
                 position=180;
+            else
+                VibrationLevel.LeftMotorSpeed = 0;
+                VibrationLevel.RightMotorSpeed = 0;
+                myController.SetVibration(VibrationLevel);
             end
+            
             fprintf(arrob_serie,strcat("p",dof,",0,",num2str(position)));  
         elseif buttons.LeftBumper == 1
             dof = num2str(get(handles.pop_selected_dof,'Value')-1);
@@ -627,6 +638,10 @@ if keys == 1
             end
         end
     end
+else
+    VibrationLevel.LeftMotorSpeed = 0;
+    VibrationLevel.RightMotorSpeed = 0;
+    myController.SetVibration(VibrationLevel);
 end
 % buttons = struct2array(ButtonStates);
 % num = 0;
