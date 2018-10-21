@@ -455,7 +455,7 @@ if size(regexp(input,pattern,'match')) == 1 %%Si la expression es correcta
             end
         case 'e'
             if numbers(1) ~= 0
-                fprintf("Error: %d",numbers(1));
+                fprintf("Error: %d\n",numbers(1));
             end
         case 'p'
             if (numbers(1) == str2num(dof)) && (n_size == 3)
@@ -466,7 +466,7 @@ if size(regexp(input,pattern,'match')) == 1 %%Si la expression es correcta
                 end
             end
         otherwise
-            fprintf("No spected");
+            fprintf("No spected\n");
     end  
 else
         fprintf("No coincide\n %s\n",input);

@@ -63,11 +63,13 @@ void dof::print_eeprom(void){
 
 void dof::attach_servo(void){
   dof_servo.attach(data[SERVO_PIN]);
-  dof_servo.write(map(data[HOME_DEGREE],data[MIN_DEGREE],data[MAX_DEGREE],data[MIN_SIGNAL],data[MAX_SIGNAL]));  
+  dof_servo.write(map(data[HOME_DEGREE],data[MIN_DEGREE],data[MAX_DEGREE],data[MIN_SIGNAL],data[MAX_SIGNAL])); 
+  attached=true; 
 }
 
 void dof::detach_servo(void){
    dof_servo.detach();
+   attached=false;
 }
 
 void dof::set_position(int x,int _degree){
