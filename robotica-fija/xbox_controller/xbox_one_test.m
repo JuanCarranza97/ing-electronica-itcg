@@ -118,7 +118,7 @@ set(handles.text8,'String',strcat("B: ",num2str(ButtonStates.B)));
 set(handles.text9,'String',strcat("A: ",num2str(ButtonStates.A)));
 set(handles.text10,'String',strcat("X: ",num2str(ButtonStates.X)));
 set(handles.text11,'String',strcat("DPadUp: ",num2str(ButtonStates.DPadUp)));
-set(handles.text12,'String',strcat("DadRight: ",num2str(ButtonStates.DPadRight)));
+set(handles.text12,'String',strcat("DPadRight: ",num2str(ButtonStates.DPadRight)));
 set(handles.text13,'String',strcat("DPadDown: ",num2str(ButtonStates.DPadDown)));
 set(handles.text14,'String',strcat("DPadLeft: ",num2str(ButtonStates.DPadLeft)));
 set(handles.text15,'String',strcat("Back: ",num2str(ButtonStates.Back)));

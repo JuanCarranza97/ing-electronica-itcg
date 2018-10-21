@@ -1,4 +1,3 @@
-
 #include "ARROB_CONFIG.h"
 
 void setup() {

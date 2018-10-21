@@ -29,6 +29,7 @@
         void detach_servo(void);
         void set_position(int x,int _degree);
         void test_servo(int _delay);
+        void go_home(int _delay);
         int get_pos(int x);
         int attached = false;
      private:

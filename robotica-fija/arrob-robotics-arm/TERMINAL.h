@@ -22,6 +22,7 @@
   int terminalAction_d(int var[]);
   int terminalAction_p(int var[]);
   int terminalAction_t(int var[]);
+  int terminalAction_h(int var[]);
   /*void terminalAction_a(int var[],int tam);
   void terminalAction_B(int var[],int tam);
   void terminalAction_b(int var[],int tam);*/

@@ -13,6 +13,7 @@ terminal_actions actions[]={
   {terminalAction_d,'d',2},
   {terminalAction_p,'p',3},
   {terminalAction_t,'t',2},
+  {terminalAction_h,'h',2},
 };
 
 
@@ -140,6 +141,17 @@ int terminalAction_p(int var[]){
 int terminalAction_t(int var[]){
   if(var[0] >= 0 && var[0] <6){
     axis[var[0]].test_servo(var[1]);
+  }
+  else{
+    return 3;
+  }
+  UART_PORT.println("p"+String(var[0])+",1,"+String(axis[var[0]].get_pos(1)));
+  UART_PORT.println("p"+String(var[0])+",0,"+String(axis[var[0]].get_pos(0)));
+  return 0;
+}
+int terminalAction_h(int var[]){
+  if(var[0] >= 0 && var[0] <6){
+    axis[var[0]].go_home(var[1]);
   }
   else{
     return 3;

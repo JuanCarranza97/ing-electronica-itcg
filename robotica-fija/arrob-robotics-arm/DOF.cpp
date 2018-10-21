@@ -111,3 +111,19 @@ int dof::get_pos(int x){
   else       return (map(dof_servo.read(),data[MIN_SIGNAL],data[MAX_SIGNAL],data[MIN_DEGREE],data[MAX_DEGREE]));
 }
 
+void dof::go_home(int _delay){
+  int actual_pos = map(dof_servo.read(),data[MIN_SIGNAL],data[MAX_SIGNAL],data[MIN_DEGREE],data[MAX_DEGREE]);
+  if(actual_pos > data[HOME_DEGREE]){
+    for(int i = actual_pos;i >= data[HOME_DEGREE];i--){
+      dof::set_position(1,i);
+      delay(_delay);
+    }
+  }
+  else{
+    for(int i = actual_pos;i<=data[HOME_DEGREE];i++){
+      dof::set_position(1,i);
+      delay(_delay);
+    }
+  }
+}
+

@@ -615,7 +615,7 @@ if keys == 1
             fprintf(arrob_serie,"e0");
             read_values(handles)
             dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            fprintf(arrob_serie,strcat("h",dof,",10")); 
+              fprintf(arrob_serie,strcat("h",dof,",10")); 
              while buttons.B == 1
                 [keys,buttons] = update_buttons();
              end
