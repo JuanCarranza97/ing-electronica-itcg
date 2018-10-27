@@ -22,7 +22,7 @@ function varargout = settings_guide(varargin)
 
 % Edit the above text to modify the response to help settings_guide
 
-% Last Modified by GUIDE v2.5 21-Oct-2018 11:26:54
+% Last Modified by GUIDE v2.5 17-Oct-2018 23:17:18
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -58,23 +58,12 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 global arrob_serie
-try
-    fopen(arrob_serie)
-end
 arrob_serie.BytesAvailableFcn = {@arrob_serial_complete,handles};
-read_values(handles)
-
-controllerLibrary = NET.addAssembly([pwd '\SharpDX.XInput.dll']);
-global myController
-myController = SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One);
-global VibrationLevel
-VibrationLevel = SharpDX.XInput.Vibration;
-global t
-t = timer('Period',.05,'ExecutionMode','fixedSpacing');
-t.TimerFcn = {@my_callback_fcn,handles};
-start(t);
-
-
+dof = num2str(get(handles.pop_selected_dof,'Value')-1);
+for i = 0:5
+    fprintf(arrob_serie,strcat("r",dof,",",num2str(i)));
+    pause(.01);
+end
 % UIWAIT makes settings_guide wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -98,8 +87,12 @@ function pop_selected_dof_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns pop_selected_dof contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from pop_selected_dof
-read_values(handles)
-
+global arrob_serie
+dof = num2str(get(handles.pop_selected_dof,'Value')-1);
+for i = 0:7
+    fprintf(arrob_serie,strcat("r",dof,",",num2str(i)));
+    pause(.01);
+end
 
 % --- Executes during object creation, after setting all properties.
 function pop_selected_dof_CreateFcn(hObject, eventdata, handles)
@@ -121,8 +114,11 @@ function read_button_Callback(hObject, eventdata, handles)
 global arrob_serie
 fprintf(arrob_serie,"e0");
 pause(.25)
-read_values(handles)
-
+dof = num2str(get(handles.pop_selected_dof,'Value')-1);
+for i = 0:7
+    fprintf(arrob_serie,strcat("r",dof,",",num2str(i)));
+    pause(.01);
+end
 
 % --- Executes on button press in save_button.
 function save_button_Callback(hObject, eventdata, handles)
@@ -137,7 +133,7 @@ function close_button_Callback(hObject, eventdata, handles)
 % hObject    handle to close_button (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-closing()
+close()
 
 % --- Executes on button press in test_button.
 function test_button_Callback(hObject, eventdata, handles)
@@ -327,7 +323,6 @@ function attach_button_Callback(hObject, eventdata, handles)
 global arrob_serie
 dof = num2str(get(handles.pop_selected_dof,'Value')-1);
 fprintf(arrob_serie,strcat("d",dof,",1"));
-set(handles.state,'String','ATTACHED');
 
 % --- Executes on button press in detach_button.
 function detach_button_Callback(hObject, eventdata, handles)
@@ -337,7 +332,7 @@ function detach_button_Callback(hObject, eventdata, handles)
 global arrob_serie
 dof = num2str(get(handles.pop_selected_dof,'Value')-1);
 fprintf(arrob_serie,strcat("d",dof,",0"));
-set(handles.state,'String','DETACHED');
+
 
 function position_input_Callback(hObject, eventdata, handles)
 % hObject    handle to position_input (see GCBO)
@@ -418,13 +413,13 @@ fprintf(arrob_serie,strcat("r",dof,",",num2str(6)));
 
 function arrob_serial_complete(hObject,event,handles)
 global arrob_serie
+
 input = fgetl(arrob_serie);
 size_i = size(input);
 size_i = size_i(2);
 input = input(1:size_i-1);
 
 pattern = '[A-Za-z][-]?[0-9]+([,][-]?[0-9]+)*$';
-try
 dof = num2str(get(handles.pop_selected_dof,'Value')-1);
 
 if size(regexp(input,pattern,'match')) == 1 %%Si la expression es correcta
@@ -470,24 +465,17 @@ if size(regexp(input,pattern,'match')) == 1 %%Si la expression es correcta
                     set(handles.map_position_input,'String',num2str(numbers(3)));
                 end
             end
-        case 'd'
-            if (numbers(1) == str2num(dof)) && (n_size == 2)
-                if numbers(2) == 0
-                    set(handles.state,'String','DETACHED');
-                else
-                    set(handles.state,'String','ATTACHED');
-                end
-            end
         otherwise
-            fprintf("No spected");
+            fprintf("No spected\n");
     end  
 else
         fprintf("No coincide\n %s\n",input);
        
 end
-end
+
 %%fprintf("Interrupcion .. 2\n");
 %fprintf(strcat(input,"\n"));
+
 
 % --- Executes on button press in pushbutton10.
 function pushbutton10_Callback(hObject, eventdata, handles)
@@ -499,202 +487,3 @@ dof = num2str(get(handles.pop_selected_dof,'Value')-1);
 degree = get(handles.map_position_input,'String');
 set(handles.home_degree_input,'String',degree);
 fprintf(arrob_serie,strcat("s",dof,",5,",degree));
-
-function my_callback_fcn(obj, event,handles)
-global myController
-global arrob_serie
-State = myController.GetState();
-global VibrationLevel
-%global VibrationLevel
-%VibrationLevel.LeftMotorSpeed = double(State.Gamepad.LeftTrigger)*255;
-%myController.SetVibration(VibrationLevel);
-%ButtonStates = ButtonStateParser(State.Gamepad.Buttons);
-
-[keys,buttons] = update_buttons();
-if keys == 1
-    try
-        if buttons.DPadRight == 1
-            dof = get(handles.pop_selected_dof,'Value');
-            dof = dof+1;
-            if dof == 7
-                dof=1;
-            end
-
-            set(handles.pop_selected_dof,'Value',dof);       
-            read_values(handles)  %%
-            
-            while buttons.DPadRight == 1
-                [keys,buttons] = update_buttons();
-            end
-        elseif buttons.DPadLeft == 1
-            dof = get(handles.pop_selected_dof,'Value');
-            dof = dof-1;
-            if dof == 0
-                dof=6;
-            end
-
-            set(handles.pop_selected_dof,'Value',dof);       
-            read_values(handles)
-            while buttons.DPadLeft == 1
-                [keys,buttons] = update_buttons();
-            end
-        elseif buttons.Back == 1
-            fprintf("Preparing to close...\n");
-            while buttons.Back == 1
-                [keys,buttons] = update_buttons();
-            end
-            fprintf("Closing...\n");
-            closing();
-        elseif buttons.DPadUp == 1
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            fprintf(arrob_serie,strcat("d",dof,",1"));
-            set(handles.state,'String','ATTACHED');
-        elseif buttons.DPadDown == 1
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            fprintf(arrob_serie,strcat("d",dof,",0"));
-            set(handles.state,'String','DETACHED');
-        elseif buttons.A == 1
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            min_degree=str2double(get(handles.min_degree_input,'String'));
-            max_degree=str2double(get(handles.max_degree_input,'String'));
-            LeftTrigger = round(map_function(double(State.Gamepad.LeftThumbY),-32768,32767,min_degree,max_degree));
-            fprintf(arrob_serie,strcat("p",dof,",1,",num2str(LeftTrigger)));
-        elseif buttons.X == 1
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            min_signal=str2double(get(handles.min_signal_input,'String'));
-            max_signal=str2double(get(handles.max_signal_input,'String'));
-            if min_signal < max_signal
-                min_signal = min_signal-20;
-                max_signal = max_signal+20;
-                position = round(map_function(double(State.Gamepad.LeftThumbY),-32768,32767,min_signal,max_signal));
-            else
-                min_signal = min_signal+20;
-                max_signal = max_signal-20;
-                position = round(map_function(double(State.Gamepad.LeftThumbY),-32768,32767,min_signal,max_signal));              
-            end
-            if(position < 0)               
-                VibrationLevel.LeftMotorSpeed = 65000;
-                VibrationLevel.RightMotorSpeed = 65000;
-                myController.SetVibration(VibrationLevel);
-                fprintf("Servo was not capable to set %d position\n",position);
-                position=0;
-            elseif position > 180
-                VibrationLevel.LeftMotorSpeed = 65000;
-                VibrationLevel.RightMotorSpeed = 65000;
-                myController.SetVibration(VibrationLevel);
-                fprintf("Servo was not capable to set %d position\n",position);
-                position=180;
-            else
-                VibrationLevel.LeftMotorSpeed = 0;
-                VibrationLevel.RightMotorSpeed = 0;
-                myController.SetVibration(VibrationLevel);
-            end
-            if position > 180
-                
-            else
-                VibrationLevel.LeftMotorSpeed = 0;
-                VibrationLevel.RightMotorSpeed = 0;
-                myController.SetVibration(VibrationLevel);
-            end
-            fprintf(arrob_serie,strcat("p",dof,",0,",num2str(position)));  
-        elseif buttons.LeftBumper == 1
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            degree = get(handles.position_input,'String');
-            set(handles.min_signal_input,'String',degree);
-            fprintf(arrob_serie,strcat("s",dof,",2,",degree));
-            fprintf(arrob_serie,strcat("r",dof,",",num2str(6)));  
-        elseif buttons.RightBumper == 1
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            degree = get(handles.position_input,'String');
-            set(handles.max_signal_input,'String',degree);
-            fprintf(arrob_serie,strcat("s",dof,",1,",degree));    
-        elseif buttons.Start == 1
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            fprintf(arrob_serie,strcat("t",dof,",10"));
-            while buttons.Start == 1
-                [keys,buttons] = update_buttons();
-            end
-        elseif buttons.LeftStick == 1
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            degree = get(handles.map_position_input,'String');
-            set(handles.home_degree_input,'String',degree);
-            fprintf(arrob_serie,strcat("s",dof,",5,",degree)); 
-            while buttons.LeftStick == 1
-                [keys,buttons] = update_buttons();
-            end
-        elseif buttons.RightStick == 1
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            fprintf(arrob_serie,strcat("h",dof,",10"));
-            while buttons.RightStick == 1
-                [keys,buttons] = update_buttons();
-            end
-        elseif buttons.B == 1
-            fprintf(arrob_serie,"e0");
-            read_values(handles)
-            dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-            fprintf(arrob_serie,strcat("h",dof,",10")); 
-             while buttons.B == 1
-                [keys,buttons] = update_buttons();
-             end
-        elseif buttons.Y == 1
-            fprintf(arrob_serie,"e1");
-            read_values(handles)
-            while buttons.Y == 1
-                [keys,buttons] = update_buttons();
-            end
-        end
-    end
-end
-% buttons = struct2array(ButtonStates);
-% num = 0;
-% for i = buttons
-%     if i
-%         num=num+1;
-%     end        
-% end
-
-
-function [keys_pressed,ButtonStates] = update_buttons()
-global myController
-State = myController.GetState();
-ButtonStates = ButtonStateParser(State.Gamepad.Buttons);
-buttons = struct2array(ButtonStates);
-keys_pressed = 0;
-for i = buttons
-    if i
-        keys_pressed=keys_pressed+1;
-    end        
-end
-
-function closing()
-global VibrationLevel
-global myController
-VibrationLevel.LeftMotorSpeed = 0;
-myController.SetVibration(VibrationLevel);
-global t
-stop(t);
-close(settings_guide)
-
-function read_values(handles)
-global arrob_serie
-dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-for i = 0:8
-    fprintf(arrob_serie,strcat("r",dof,",",num2str(i)));
-    pause(.01);
-end
-
-function maped = map_function(x,in_min,in_max,out_min,out_max)
-%long map(long x, long in_min, long in_max, long out_min, long out_max){
-%  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-%}
-maped = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-
-
-% --- Executes on button press in go_home_button.
-function go_home_button_Callback(hObject, eventdata, handles)
-% hObject    handle to go_home_button (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-global arrob_serie
-dof = num2str(get(handles.pop_selected_dof,'Value')-1);
-fprintf(arrob_serie,strcat("h",dof,",10"));
