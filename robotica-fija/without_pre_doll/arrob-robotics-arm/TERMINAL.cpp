@@ -1,7 +1,7 @@
 #include "TERMINAL.h"
 
-extern dof axis[SERVOS_SIZE]; 
-const String axis_names[SERVOS_SIZE] = {"WAIST","SHOULDER_1","SHOULDER_2","ELBOW","PRE-DOLL","DOLL","GRIPPER"};
+extern dof axis[6]; 
+const String axis_names[6] = {"WAIST","SHOULDER_1","SHOULDER_2","ELBOW","DOLL","GRIPPER"};
 const String setting_names[DATA_SIZE] = {"SERVO_PIN","MAX_SIGNAL","MIN_SIGNAL","MAX_DEGREE","MIN_DEGREE","HOME_DEGREE"};
 
 
@@ -57,7 +57,7 @@ int terminalAction_a(int var[]){
 }
 
 int terminalAction_s(int var[]){
-  if(var[0] >= 0 && var[0] < SERVOS_SIZE){  //If DOF exists
+  if(var[0] >= 0 && var[0] <= 5){  //If DOF exists
     if(var[1] >= 0 && var[1] < DATA_SIZE){  //if configuration exists
        axis[var[0]].set(var[1],var[2]);
     }
@@ -81,7 +81,7 @@ int terminalAction_e(int var[]){
 }
 
 int terminalAction_r(int var[]){
-   if(var[0] >= 0 && var[0] < SERVOS_SIZE){
+   if(var[0] >= 0 && var[0] <= 5){
       if(var[1] >= 0 && var[1] < DATA_SIZE){
         UART_PORT.println("v"+String(var[0])+","+String(var[1])+","+String(axis[var[0]].get_value(var[1])));
       }
@@ -105,7 +105,7 @@ int terminalAction_r(int var[]){
  }
 
 int terminalAction_d(int var[]){
-  if(var[0] >= 0 && var[0] < SERVOS_SIZE){
+  if(var[0] >= 0 && var[0] < 6){
     if(var[1] == 0)      axis[var[0]].detach_servo();
     else if(var[1] == 1) {
       axis[var[0]].attach_servo();
@@ -122,7 +122,7 @@ int terminalAction_d(int var[]){
 
 int terminalAction_p(int var[]){
   //0 without map,1 with map
-  if(var[0] >= 0 && var[0] < SERVOS_SIZE) {
+  if(var[0] >= 0 && var[0] < 6) {
     if(var[1] == 0 || var[1] == 1) {
       axis[var[0]].set_position(var[1],var[2]);
         UART_PORT.println("p"+String(var[0])+",1,"+String(axis[var[0]].get_pos(1)));
@@ -139,7 +139,7 @@ int terminalAction_p(int var[]){
 }
 
 int terminalAction_t(int var[]){
-  if(var[0] >= 0 && var[0] <SERVOS_SIZE){
+  if(var[0] >= 0 && var[0] <6){
     axis[var[0]].test_servo(var[1]);
   }
   else{
@@ -149,9 +149,8 @@ int terminalAction_t(int var[]){
   UART_PORT.println("p"+String(var[0])+",0,"+String(axis[var[0]].get_pos(0)));
   return 0;
 }
-
 int terminalAction_h(int var[]){
-  if(var[0] >= 0 && var[0] <SERVOS_SIZE){
+  if(var[0] >= 0 && var[0] <6){
     axis[var[0]].go_home(var[1]);
   }
   else{

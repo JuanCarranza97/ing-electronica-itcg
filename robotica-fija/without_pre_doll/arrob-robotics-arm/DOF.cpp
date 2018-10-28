@@ -5,6 +5,37 @@ dof::dof(){
 }
 
 void dof::set(int _setup,int _val){
+  #ifdef TERMINAL_LOG
+  switch(_setup){
+    case SERVO_PIN:     
+      UART_PORT.println(" SERVO_PIN configured to "+String(_val));
+      break;
+      
+    case MAX_SIGNAL:
+      UART_PORT.println(" MAX_SIGNAL configured to "+String(_val));
+      break;
+
+    case MIN_SIGNAL:
+      UART_PORT.println(" MIN_SIGNAL configured to "+String(_val));
+      break;
+
+    case MAX_DEGREE:
+      UART_PORT.println(" MAX_DEGREE configured to "+String(_val));
+      break;
+
+    case MIN_DEGREE:
+      UART_PORT.println(" MIN_DEGREE configured to "+String(_val));
+      break;
+
+    case HOME_DEGREE:
+      UART_PORT.println(" HOME_DEGREE configured to "+String(_val));
+      break;
+
+    default:
+      UART_PORT.println(" DOF setup input it's not configured");
+      break;
+  }
+  #endif
   data[_setup] = _val;
 }
 
@@ -12,27 +43,18 @@ int dof::get_value(int _setup){
   if(_setup >= 0 && _setup < DATA_SIZE)
     return data[_setup];
 }
-
 void dof::init_eeprom_at(int _addr){
   eeprom_addr = _addr;  
 }
 
 void dof::eeprom_read(void){
-    data[SERVO_PIN]   = (int)EEPROM.read((byte)(eeprom_addr));  
-    data[MAX_SIGNAL]  = (int)EEPROM.read((byte)(eeprom_addr+1));  
-    data[MIN_SIGNAL]  = (int)EEPROM.read((byte)(eeprom_addr+2)); 
-    data[MAX_DEGREE]  = eeprom_read_16(eeprom_addr+3);
-    data[MIN_DEGREE]  = eeprom_read_16(eeprom_addr+5);
-    data[HOME_DEGREE] = eeprom_read_16(eeprom_addr+7);     
+  for(int i = 0;i<DATA_SIZE;i++)
+    data[i] = (int)EEPROM.read((byte)(eeprom_addr+i));   
 }
 
 void dof::eeprom_write(void){
-     EEPROM.write((byte)(eeprom_addr),(byte)(data[SERVO_PIN]));     //0
-     EEPROM.write((byte)(eeprom_addr+1),(byte)(data[MAX_SIGNAL]));  //1
-     EEPROM.write((byte)(eeprom_addr+2),(byte)(data[MIN_SIGNAL]));  //2
-     eeprom_write_16(eeprom_addr+3,data[MAX_DEGREE]);               // 3 - 4
-     eeprom_write_16(eeprom_addr+5,data[MIN_DEGREE]);               // 5 -6
-     eeprom_write_16(eeprom_addr+7,data[HOME_DEGREE]);              // 7 -8
+  for(int i = 0;i<DATA_SIZE;i++)
+     EEPROM.write((byte)(eeprom_addr+i),(byte)(data[i]));  
 }
 
 void dof::print_eeprom(void){

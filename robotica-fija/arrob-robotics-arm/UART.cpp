@@ -44,7 +44,7 @@ bool uart_get(char *caracter_salida,int *size_,int _datos[]){
       if(UART_PORT.available()){
         actual = UART_PORT.read();
 
-          if(actual >= 48 && actual <= 57){//Si el caracter es un digito
+          if((actual >= 48 && actual <= 57) || (actual == '-')){//Si el caracter es un digito
             first_digit = true;
             valores[index]+=actual;
             last_char = actual; 
