@@ -67,7 +67,22 @@ set(handles.text12,'String',round(get(handles.slider5,'value')));
 set(handles.text13,'String',round(get(handles.slider6,'value')));
 % UIWAIT makes forward_kinematics wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
+global arrob_serie
+try
+    fopen(arrob_serie)
+end
+arrob_serie.BytesAvailableFcn = {@arrob_serial_complete_kinematic,handles};
+%read_values(handles)
 
+controllerLibrary = NET.addAssembly([pwd '\SharpDX.XInput.dll']);
+global myController
+myController = SharpDX.XInput.Controller(SharpDX.XInput.UserIndex.One);
+global VibrationLevel
+VibrationLevel = SharpDX.XInput.Vibration;
+global t
+t = timer('Period',.05,'ExecutionMode','fixedSpacing');
+t.TimerFcn = {@my_callback_fcn_kinematics,handles};
+start(t);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = forward_kinematics_OutputFcn(hObject, eventdata, handles) 
@@ -220,3 +235,148 @@ end
 function update_arrob(handles)
     axes(handles.axes1);
     draw_arrob([get(handles.slider1,'value') get(handles.slider2,'value') get(handles.slider3,'value') get(handles.slider4,'value') get(handles.slider5,'value')]);
+
+function arrob_serial_complete(hObject,event,handles)
+global arrob_serie
+input = fgetl(arrob_serie);
+size_i = size(input);
+size_i = size_i(2);
+input = input(1:size_i-1);
+
+pattern = '[A-Za-z][-]?[0-9]+([,][-]?[0-9]+)*$';
+try
+dof = num2str(get(handles.pop_selected_dof,'Value')-1);
+
+if size(regexp(input,pattern,'match')) == 1 %%Si la expression es correcta
+    character = input(1);
+    input = erase(input,character);
+    numbers_str=split(input,',');
+    
+    n_size = size(numbers_str);
+    n_size = n_size(1);
+    
+    numbers=[];
+    for i=1:n_size
+        numbers(i) = str2double(char(numbers_str(i)));
+    end
+    
+    switch character
+        case 'e'
+            if numbers(1) ~= 0
+                fprintf("Error: %d\n",numbers(1));
+            end
+        case 'p'
+            if (numbers(1) == str2num(dof)) && (n_size == 3)
+                if numbers(2) == 0
+                    set(handles.position_input,'String',num2str(numbers(3)));
+                else
+                    set(handles.map_position_input,'String',num2str(numbers(3)));
+                end
+            end
+        otherwise
+            fprintf("No spected");
+    end  
+else
+        fprintf("No coincide\n %s\n",input);
+       
+end
+end
+
+function my_callback_fcn_kinematics(obj, event,handles)
+global myController;
+global arrob_serie;
+State = myController.GetState();
+global VibrationLevel;
+
+[keys,buttons] = update_buttons();
+if keys == 1
+    try
+        if buttons.DPadRight == 1
+            fprintf("DPad Right\n");
+            
+            while buttons.DPadRight == 1
+                [keys,buttons] = update_buttons();
+            end
+        elseif buttons.DPadLeft == 1
+            fprintf("DPad Left\n");
+            while buttons.DPadLeft == 1
+                [keys,buttons] = update_buttons();
+            end
+        elseif buttons.Back == 1
+            fprintf("Preparing to close...\n");
+            while buttons.Back == 1
+                [keys,buttons] = update_buttons();
+            end
+            fprintf("Closing...\n");
+            closing();
+        elseif buttons.DPadUp == 1
+            fprintf("DPad Up\n");
+            while buttons.DPadUp == 1
+                [keys,buttons] = update_buttons();
+            end
+        elseif buttons.DPadDown == 1
+            fprintf("DPad Down\n");
+            while buttons.DPadDown == 1
+                [keys,buttons] = update_buttons();
+            end
+        elseif buttons.A == 1
+            fprintf("A\n");
+        elseif buttons.X == 1
+            fprintf("X\n"); 
+        elseif buttons.LeftBumper == 1
+            fprintf("Left Bumper\n");  
+        elseif buttons.RightBumper == 1
+            fprintf("Right Bumper\n");    
+        elseif buttons.Start == 1
+            fprintf("Start\n");
+            while buttons.Start == 1
+                [keys,buttons] = update_buttons();
+            end
+        elseif buttons.LeftStick == 1
+            fprintf("LeftStick\n");
+            while buttons.LeftStick == 1
+                [keys,buttons] = update_buttons();
+            end
+        elseif buttons.RightStick == 1
+            fprintf("Right Stick\n");
+            while buttons.RightStick == 1
+                [keys,buttons] = update_buttons();
+            end
+        elseif buttons.B == 1
+             fprintf("B\n");
+             while buttons.B == 1
+                [keys,buttons] = update_buttons();
+             end
+        elseif buttons.Y == 1
+            fprintf("Y\n");
+            while buttons.Y == 1
+                [keys,buttons] = update_buttons();
+            end
+        end
+    end
+else
+    VibrationLevel.LeftMotorSpeed = 0;
+    VibrationLevel.RightMotorSpeed = 0;
+    myController.SetVibration(VibrationLevel);
+end
+
+function [keys_pressed,ButtonStates] = update_buttons()
+global myController
+State = myController.GetState();
+ButtonStates = ButtonStateParser(State.Gamepad.Buttons);
+buttons = struct2array(ButtonStates);
+keys_pressed = 0;
+for i = buttons
+    if i
+        keys_pressed=keys_pressed+1;
+    end        
+end
+
+function closing()
+global VibrationLevel
+global myController
+VibrationLevel.LeftMotorSpeed = 0;
+myController.SetVibration(VibrationLevel);
+global t
+stop(t);
+close();

@@ -501,10 +501,10 @@ set(handles.home_degree_input,'String',degree);
 fprintf(arrob_serie,strcat("s",dof,",5,",degree));
 
 function my_callback_fcn(obj, event,handles)
-global myController
-global arrob_serie
+global myController;
+global arrob_serie;
 State = myController.GetState();
-global VibrationLevel
+global VibrationLevel;
 %global VibrationLevel
 %VibrationLevel.LeftMotorSpeed = double(State.Gamepad.LeftTrigger)*255;
 %myController.SetVibration(VibrationLevel);
