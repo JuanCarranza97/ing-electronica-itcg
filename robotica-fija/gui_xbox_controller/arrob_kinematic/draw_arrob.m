@@ -2,9 +2,9 @@ function draw_arrob(theta_joints)
     links_length = [9.5 10.5 11.7 19];
     
     theta=theta_joints;
-    d     = [links_length(1)     0                0                0       links_length(4)];
-    a     = [0                   links_length(2)  links_length(3)  0       0];    
-    alpha = [90                  0               0                90       0];
+    d     = [links_length(1)     0                0                0       0];
+    a     = [0                   links_length(2)  links_length(3)  links_length(4)       0];    
+    alpha = [90                  0               0                 0       90];
     
     link_01 = denavit_hartenberg(a(1), d(1), alpha(1), theta(1));
     link_12 = denavit_hartenberg(a(2), d(2), alpha(2), theta(2));
@@ -12,14 +12,14 @@ function draw_arrob(theta_joints)
     link_34 = denavit_hartenberg(a(4), d(4), alpha(4), theta(4));
     link_45 = denavit_hartenberg(a(5), d(5), alpha(5), theta(5));
     
-    link_02 = link_01*link_12;
-    link_03 = link_02*link_23;
-    link_04 = link_03*link_34;
-    link_05 = link_04*link_45;
+    link_02 = link_01*link_12
+    link_03 = link_02*link_23
+    link_04 = link_03*link_34
+    link_05 = link_04*link_45
     
-    x = [0 link_01(1,4) link_02(1,4) link_03(1,4) link_04(1,4) link_05(1,4)];
-    y = [0 link_01(2,4) link_02(2,4) link_03(2,4) link_04(2,4) link_05(2,4)];
-    z = [0 link_01(3,4) link_02(3,4) link_03(3,4) link_04(3,4) link_05(3,4)];
+    x = [0 link_01(1,4) link_02(1,4) link_03(1,4) link_04(1,4) link_05(1,4)]
+    y = [0 link_01(2,4) link_02(2,4) link_03(2,4) link_04(2,4) link_05(2,4)]
+    z = [0 link_01(3,4) link_02(3,4) link_03(3,4) link_04(3,4) link_05(3,4)]
     
     cla
     hold on;
