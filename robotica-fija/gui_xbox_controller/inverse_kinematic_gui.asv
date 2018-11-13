@@ -22,7 +22,7 @@ function varargout = inverse_kinematic_gui(varargin)
 
 % Edit the above text to modify the response to help inverse_kinematic_gui
 
-% Last Modified by GUIDE v2.5 12-Nov-2018 20:45:20
+% Last Modified by GUIDE v2.5 12-Nov-2018 21:47:59
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -192,6 +192,7 @@ end
 
 function update_robot(handles)
 global last_pos
+global arrob_serie
 x = str2double(get(handles.value_x,'String'));
 y = str2double(get(handles.value_y,'String'));
 z = str2double(get(handles.value_z,'String'));
@@ -201,16 +202,18 @@ axes(handles.axes1);
 tcp_theta=get(handles.tcp_angle,'Value');
 
 set(handles.text5,'String',strcat("TCP angle=",num2str(tcp_theta)));
-pos = inverse_kinematic_arrob([x,y,z],tcp_theta);
+[pos,alpha,theta_arriba] = inverse_kinematic_arrob([x,y,z],tcp_theta);
 
 diffx = abs(x)-abs(pos(1));
 diffy = abs(y)-abs(pos(2));
 diffz = abs(z)-abs(pos(3));
 
 if (diffx > -3 && diffx < 3) && (diffy > -3 && diffy < 3) && (diffz > -3 && diffz < 3)  
-    last_pos = [x y z]
+    last_pos = [x y z];
+    fprintf(arrob_serie,strcat("p0,1,",num2str(alpha)));  %WAIST
+    fprintf(arrob_serie,strcat("p1,1,",num2str(theta_arriba(1)))); %SHOULDER 1
+    fprintf(arrob_serie,strcat("p3,1,",num2str(theta_arriba(1)))); %
 else
-    errordlg('No es posible llegar a la posicion','Error');
     set(handles.value_x,'String',num2str(last_pos(1)));
     set(handles.value_y,'String',num2str(last_pos(2)));
     set(handles.value_z,'String',num2str(last_pos(3)));
@@ -224,7 +227,8 @@ function subtract_x_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 x = str2double(get(handles.value_x,'String'));
-x = x-1;
+increment = str2double(get(handles.increment_x,'String'));
+x = x-increment;
 set(handles.value_x,'String',x);
 update_robot(handles);
 
@@ -234,7 +238,8 @@ function add_x_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 x = str2double(get(handles.value_x,'String'));
-x = x+1;
+increment = str2double(get(handles.increment_x,'String'));
+x = x+increment;
 set(handles.value_x,'String',x);
 update_robot(handles);
 
@@ -244,7 +249,8 @@ function subtract_y_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 y= str2double(get(handles.value_y,'String'));
-y = y-1;
+increment = str2double(get(handles.increment_y,'String'));
+y = y-increment;
 set(handles.value_y,'String',y);
 update_robot(handles);
 
@@ -254,7 +260,8 @@ function add_y_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 y= str2double(get(handles.value_y,'String'));
-y = y+1;
+increment = str2double(get(handles.increment_y,'String'));
+y = y+increment;
 set(handles.value_y,'String',y);
 update_robot(handles);
 
@@ -264,7 +271,8 @@ function subtract_z_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 z= str2double(get(handles.value_z,'String'));
-z = z-1;
+increment = str2double(get(handles.increment_z,'String'));
+z = z-increment;
 set(handles.value_z,'String',z);
 update_robot(handles);
 
@@ -274,7 +282,8 @@ function add_z_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 z= str2double(get(handles.value_z,'String'));
-z = z+1;
+increment = str2double(get(handles.increment_z,'String'));
+z = z+increment;
 set(handles.value_z,'String',z);
 update_robot(handles);
 
@@ -388,3 +397,80 @@ tcp= get(handles.tcp_angle,'Value');
 tcp = tcp+1;
 set(handles.tcp_angle,'Value',tcp);
 update_robot(handles);
+
+
+
+function increment_x_Callback(hObject, eventdata, handles)
+% hObject    handle to increment_x (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of increment_x as text
+%        str2double(get(hObject,'String')) returns contents of increment_x as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function increment_x_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to increment_x (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function increment_y_Callback(hObject, eventdata, handles)
+% hObject    handle to increment_y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of increment_y as text
+%        str2double(get(hObject,'String')) returns contents of increment_y as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function increment_y_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to increment_y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function increment_z_Callback(hObject, eventdata, handles)
+% hObject    handle to increment_z (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of increment_z as text
+%        str2double(get(hObject,'String')) returns contents of increment_z as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function increment_z_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to increment_z (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in close_button.
+function close_button_Callback(hObject, eventdata, handles)
+% hObject    handle to close_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+close(inverse_kinematic_gui)

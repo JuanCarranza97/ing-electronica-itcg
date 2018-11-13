@@ -21,12 +21,21 @@ function pos = draw_arrob(theta_joints,links_length)
     y = [0 link_01(2,4) link_02(2,4) link_03(2,4) link_04(2,4) link_05(2,4)];
     z = [0 link_01(3,4) link_02(3,4) link_03(3,4) link_04(3,4) link_05(3,4)];
     
-    draw_axis(30);
-    plot3([x(1) x(2)],[y(1) y(2)],[z(1) z(2)],'r');
-    plot3([x(2) x(3)],[y(2) y(3)],[z(2) z(3)],'g');
-    plot3([x(3) x(4)],[y(3) y(4)],[z(3) z(4)],'b');
-    plot3([x(4) x(5)],[y(4) y(5)],[z(4) z(5)],'r');
-    plot3([x(5) x(6)],[y(5) y(6)],[z(5) z(6)],'g')
-    text(x(6),y(6),z(6),strcat("(",num2str(round(x(6))),",",num2str(round(y(6))),",",num2str(round(z(6))),")"));
-    pos = [x(6) y(6) z(6)];
+     pos = [x(6) y(6) z(6)];
+     
+     if isreal(x(6)) && isreal(y(6)) && isreal(z(6))
+        draw_axis(30);
+        plot3([x(1) x(2)],[y(1) y(2)],[z(1) z(2)],'r');
+        plot3([x(2) x(3)],[y(2) y(3)],[z(2) z(3)],'g');
+        plot3([x(3) x(4)],[y(3) y(4)],[z(3) z(4)],'b');
+        plot3([x(4) x(5)],[y(4) y(5)],[z(4) z(5)],'r');
+        plot3([x(5) x(6)],[y(5) y(6)],[z(5) z(6)],'g')
+        text(x(6),y(6),z(6),strcat("(",num2str(round(x(6))),",",num2str(round(y(6))),",",num2str(round(z(6))),")"));
+     else
+         fprintf("No es posible llegar a la posicion\n");
+         x(6) = 0;
+         y(6)=0;
+         z(6)=0;
+         pos = [x(6) y(6) z(6)];
+     end 
 end

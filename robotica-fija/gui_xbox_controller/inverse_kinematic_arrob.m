@@ -1,4 +1,4 @@
-function pos = inverse_kinematic_arrob(TCP,tcp_theta)
+function [pos,alpha,theta_arriba] = inverse_kinematic_arrob(TCP,tcp_theta)
 %TCP = [140 50 120];
 %tcp_theta = 314;
 
@@ -45,4 +45,5 @@ hold on;
 grid on;
 
 pos = draw_arrob([alpha theta1_arriba theta2_arriba theta_3 0],links_length);
+theta_arriba = [theta1_arriba theta2_arriba theta_3];
 end
