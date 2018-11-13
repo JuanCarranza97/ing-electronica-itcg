@@ -22,7 +22,7 @@ function varargout = main_guide(varargin)
 
 % Edit the above text to modify the response to help main_guide
 
-% Last Modified by GUIDE v2.5 28-Oct-2018 01:32:30
+% Last Modified by GUIDE v2.5 11-Nov-2018 20:12:19
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -102,3 +102,11 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 run forward_kinematics.m
+
+
+% --- Executes on button press in pushbutton3.
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+run inverse_kinematic_gui.m
