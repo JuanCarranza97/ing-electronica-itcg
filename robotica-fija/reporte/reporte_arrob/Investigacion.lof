@@ -1,0 +1,20 @@
+\select@language {spanish}
+\contentsline {figure}{\numberline {1}{\ignorespaces Componentes Internos del Microcontrolador \cite {Ravi}\relax }}{5}
+\contentsline {figure}{\numberline {2}{\ignorespaces Componentes del microcontrolador y Microprocesador\relax }}{8}
+\contentsline {figure}{\numberline {3}{\ignorespaces Arquitectura Harvard \cite {Muha}.\relax }}{9}
+\contentsline {figure}{\numberline {4}{\ignorespaces Arquitectura Von Neumann \cite {Carva}\relax }}{9}
+\contentsline {figure}{\numberline {5}{\ignorespaces Componentes Microcontrolador PIC \cite {Muha}.\relax }}{11}
+\contentsline {figure}{\numberline {6}{\ignorespaces Distribuciones de los pines en el microcontrolador 16f887 (Extraido de \cite {PIC}).\relax }}{14}
+\contentsline {figure}{\numberline {1}{\ignorespaces Compilar programa principal\relax }}{21}
+\contentsline {figure}{\numberline {2}{\ignorespaces ventana principal de GPSIM\relax }}{22}
+\contentsline {figure}{\numberline {3}{\ignorespaces Ventana principal de Real Pic Simulator\relax }}{23}
+\contentsline {figure}{\numberline {4}{\ignorespaces Simulacion de PIC16F887 en proteus\relax }}{24}
+\contentsline {figure}{\numberline {5}{\ignorespaces Programador PIC K150\relax }}{25}
+\contentsline {figure}{\numberline {6}{\ignorespaces Programador PICKIT 2\relax }}{25}
+\contentsline {figure}{\numberline {7}{\ignorespaces Programador Master PROG\relax }}{26}
+\contentsline {figure}{\numberline {1}{\ignorespaces Distribucion de pines 16F887 encapsulado DIP-40\relax }}{28}
+\contentsline {figure}{\numberline {2}{\ignorespaces Diagrama de bloques PIC16F887 \cite {PIC}\relax }}{29}
+\contentsline {figure}{\numberline {3}{\ignorespaces Configuracion del cristal externo del microcontrolador PIC\relax }}{31}
+\contentsline {figure}{\numberline {4}{\ignorespaces Encapsulado PDIP\relax }}{32}
+\contentsline {figure}{\numberline {5}{\ignorespaces Encapsulado QFN\relax }}{32}
+\contentsline {figure}{\numberline {6}{\ignorespaces Encapsulado TQFP\relax }}{33}

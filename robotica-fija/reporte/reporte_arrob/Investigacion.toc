@@ -1,0 +1,34 @@
+\select@language {spanish}
+\contentsline {section}{\numberline {1}Introducci\IeC {\'o}n a la estructura de los microcontroladores}{5}
+\contentsline {subsection}{\numberline {1.1}Conceptos b\IeC {\'a}sicos de los Microcontroladores}{5}
+\contentsline {subsubsection}{\numberline {1.1.1}Diferencia entre Microcontrolador y Microprocesador}{7}
+\contentsline {subsubsection}{\numberline {1.1.2}Tipos de arquitecturas computacionales}{8}
+\contentsline {subsection}{\numberline {1.2}Arquitectura interna del Microcontrolador}{10}
+\contentsline {subsubsection}{\numberline {1.2.1}Componentes del microcontrolador}{11}
+\contentsline {subsubsection}{\numberline {1.2.2}Registros internos}{12}
+\contentsline {subsubsection}{\numberline {1.2.3}Tipos y distribuci\IeC {\'o}n de las memoria internas}{13}
+\contentsline {subsection}{\numberline {1.3}Arquitectura externa del microcontrolador}{13}
+\contentsline {subsubsection}{\numberline {1.3.1}Distribuci\IeC {\'o}n de terminales}{14}
+\contentsline {section}{\numberline {2}Programaci\IeC {\'o}n de bajo nivel de microcontroladores}{15}
+\contentsline {subsection}{\numberline {2.1}Programaci\IeC {\'o}n en lenguaje ensamblador}{15}
+\contentsline {subsubsection}{\numberline {2.1.1}Modos de direccionamiento}{16}
+\contentsline {subsubsection}{\numberline {2.1.2}Conjunto de instrucciones}{18}
+\contentsline {paragraph}{2.1.2.1 Instrucciones Aritm\IeC {\'e}ticas}{19}
+\contentsline {paragraph}{2.1.2.2 Instrucciones l\IeC {\'o}gicas}{19}
+\contentsline {paragraph}{2.1.2.3 Instrucciones de control}{20}
+\contentsline {subsection}{\numberline {2.2}Ambiente integrado de desarrollo (IDE) para microcontroladores}{21}
+\contentsline {subsubsection}{\numberline {2.2.1}Ensamblador y compilador}{21}
+\contentsline {subsubsection}{\numberline {2.2.2}Simulador, debugger y emulador}{22}
+\contentsline {subsubsection}{\numberline {2.2.3}Equipos programadores de Microcontroladores}{24}
+\contentsline {section}{\numberline {3}Introducci\IeC {\'o}n al microcontrolador}{27}
+\contentsline {subsection}{\numberline {3.1}Caracter\IeC {\'\i }sticas de la arquitectura del microcontrolador}{27}
+\contentsline {subsubsection}{\numberline {3.1.1}Configuraci\IeC {\'o}n de los pines}{28}
+\contentsline {subsubsection}{\numberline {3.1.2}Diagrama de bloques}{28}
+\contentsline {subsubsection}{\numberline {3.1.3}Descripci\IeC {\'o}n de los pines}{28}
+\contentsline {subsection}{\numberline {3.2}Memorias del microcontrolador}{28}
+\contentsline {subsection}{\numberline {3.3}El oscilador de cristal}{30}
+\contentsline {subsection}{\numberline {3.4}Mnem\IeC {\'o}nicos del microcontrolador}{31}
+\contentsline {subsection}{\numberline {3.5}Caracter\IeC {\'\i }sticas f\IeC {\'\i }sicas del chip}{32}
+\contentsline {subsubsection}{\numberline {3.5.1}PDIP-28 PIN (PLASTIC DUAL IN-LINE PACKAGE)}{32}
+\contentsline {subsubsection}{\numberline {3.5.2}QFN-28 PIN (Quad Flat No-leads package)}{32}
+\contentsline {subsubsection}{\numberline {3.5.3}TQFP-44 PIN (Quad Flat Package)}{33}
